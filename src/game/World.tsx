@@ -179,7 +179,7 @@ export default function World(props: WorldProps) {
 
   return <>
     <color attach="background" args={['#080e14']} />
-    <fog attach="fog" args={['#101a22', 11, 43]} />
+    <fog attach="fog" args={['#101a22', 24, 90]} />
     <hemisphereLight args={["#9fb8c8", "#27323a", 1.15]} />
     <ambientLight intensity={1.1} color="#d4e1e8" />
     <hemisphereLight args={["#d1e5ef", "#53616a", 1.1]} />
@@ -189,10 +189,15 @@ export default function World(props: WorldProps) {
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.08, -5]} receiveShadow><planeGeometry args={[34, 42]} /><meshBasicMaterial color="#35464d" /></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.055, -5]}><planeGeometry args={[5.5, 42]} /><meshBasicMaterial color="#405159" /></mesh>
     <mesh position={[0, 0.025, -9]}><boxGeometry args={[0.12, 0.035, 26]} /><meshBasicMaterial color="#c3ad88" /></mesh>
-    {[-5, 5].map((x) => <Building key={x} position={[x * 1.5, 0, -13]} size={[9, 15, 8]} tone="#111a20" />)}
+    {[-1, 1].map((side) => <Building key={side} position={[side * 4.8, 0, -12]} size={[7, 14, 9]} tone="#202a31" />)}
     {[-1, 1].map((z) => <group key={z}><StreetLamp position={[-6, 0, z * 8 - 4]} /><StreetLamp position={[6, 0, z * 8 - 4]} /></group>)}
     {Array.from({ length: 10 }).map((_, i) => <mesh key={i} position={[-1.9 + (i % 2) * 3.8, 0.012, -19 + i * 2.8]} rotation={[-Math.PI / 2, 0, 0]}><planeGeometry args={[0.07, 0.9]} /><meshBasicMaterial color="#a6a99c" transparent opacity={0.35} /></mesh>)}
     <mesh position={[-2.5, 0.06, -7]}><boxGeometry args={[1.1, 0.12, 0.9]} /><meshStandardMaterial color="#253039" roughness={0.72} /></mesh>
+    <group position={[0, 0, -5.5]}>
+      <mesh position={[-1.5, 0.55, 0]}><boxGeometry args={[0.55, 1.1, 0.55]} /><meshBasicMaterial color="#d98c52" /></mesh>
+      <mesh position={[1.5, 0.38, -0.4]}><cylinderGeometry args={[0.24, 0.32, 0.76, 12]} /><meshBasicMaterial color="#8fa9b2" /></mesh>
+      <mesh position={[0, 0.018, -1.8]} rotation={[-Math.PI / 2, 0, 0]}><planeGeometry args={[4.5, 0.08]} /><meshBasicMaterial color="#d6ad7e" /></mesh>
+    </group>
     <RewindableBottle rewinding={rewinding} phase={phase} onRewindAmount={onRewindAmount} />
     <Payphone near={nearPhone.current} answered={phoneAnswered} />
     <group position={[0, 0, -23]}>
