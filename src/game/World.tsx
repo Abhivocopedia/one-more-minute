@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { Billboard, Sparkles, Text } from '@react-three/drei'
+import { Sparkles } from '@react-three/drei'
 import * as THREE from 'three'
 import { TemporalRecorder } from './TemporalRecorder'
 
@@ -133,9 +133,21 @@ function Payphone({ near, answered }: { near: boolean; answered: boolean }) {
     <mesh position={[0, 1.35, 0]} castShadow><boxGeometry args={[0.85, 1.8, 0.55]} /><meshStandardMaterial color="#18262b" metalness={0.58} roughness={0.35} /></mesh>
     <mesh position={[0, 2.28, 0.02]}><boxGeometry args={[0.92, 0.14, 0.62]} /><meshStandardMaterial color="#b18a5f" emissive="#a05b2d" emissiveIntensity={0.35} /></mesh>
     <mesh position={[0, 1.5, 0.29]}><planeGeometry args={[0.62, 0.8]} /><meshBasicMaterial color="#dca66f" /></mesh>
-    <Text position={[0, 1.86, 0.31]} fontSize={0.105} color="#1d2526" anchorX="center">GREYHAVEN</Text>
-    {near && !answered && <Billboard position={[0, 2.8, 0]}><Text fontSize={0.16} color="#f2c48c" outlineWidth={0.012} outlineColor="#101820">E  ANSWER</Text></Billboard>}
-    {answered && <Billboard position={[0, 2.8, 0]}><Text fontSize={0.13} color="#a5c6b5">CALL CONNECTED</Text></Billboard>}
+    <mesh position={[0, 1.93, 0.315]}><boxGeometry args={[0.42, 0.055, 0.018]} /><meshBasicMaterial color="#354047" /></mesh>
+    {Array.from({ length: 9 }).map((_, index) => (
+      <mesh key={index} position={[-0.13 + (index % 3) * 0.13, 1.42 - Math.floor(index / 3) * 0.12, 0.32]}>
+        <circleGeometry args={[0.025, 12]} />
+        <meshBasicMaterial color={answered ? "#82c5a4" : "#313b40"} />
+      </mesh>
+    ))}
+    <mesh position={[0.42, 1.35, 0.24]} rotation={[0, 0, -0.18]}>
+      <torusGeometry args={[0.22, 0.025, 8, 28, Math.PI]} />
+      <meshStandardMaterial color="#aeb9b9" metalness={0.8} roughness={0.24} />
+    </mesh>
+    <mesh position={[0, 2.28, 0.33]}>
+      <sphereGeometry args={[0.045, 12, 12]} />
+      <meshBasicMaterial color={near && !answered ? "#ffc27f" : answered ? "#83c9a4" : "#57646a"} />
+    </mesh>
   </group>
 }
 
@@ -168,8 +180,9 @@ export default function World(props: WorldProps) {
   return <>
     <color attach="background" args={['#080e14']} />
     <fog attach="fog" args={['#101a22', 11, 43]} />
-    <ambientLight intensity={0.5} color="#91aabc" />
-    <directionalLight position={[-8, 14, 5]} intensity={0.55} color="#8da9c3" />
+    <hemisphereLight args={["#9fb8c8", "#27323a", 1.15]} />
+    <ambientLight intensity={0.72} color="#b3c5d1" />
+    <directionalLight position={[-8, 14, 5]} intensity={1.05} color="#9ab7ce" />
     <Rain />
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.08, -5]} receiveShadow><planeGeometry args={[34, 42]} /><meshStandardMaterial color="#19252b" roughness={0.22} metalness={0.38} /></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.055, -5]}><planeGeometry args={[5.5, 42]} /><meshStandardMaterial color="#202b30" roughness={0.3} metalness={0.22} /></mesh>
@@ -179,7 +192,21 @@ export default function World(props: WorldProps) {
     <mesh position={[-2.5, 0.06, -7]}><boxGeometry args={[1.1, 0.12, 0.9]} /><meshStandardMaterial color="#253039" roughness={0.72} /></mesh>
     <RewindableBottle rewinding={rewinding} phase={phase} onRewindAmount={onRewindAmount} />
     <Payphone near={nearPhone.current} answered={phoneAnswered} />
-    <Text position={[0, 10.5, -20]} fontSize={0.65} color="#b7c3c4" anchorX="center" fillOpacity={0.75}>GREYHAVEN</Text>
+    <group position={[0, 0, -23]}>
+      <mesh position={[0, 8, 0]} castShadow>
+        <boxGeometry args={[5.2, 16, 4.2]} />
+        <meshStandardMaterial color="#202b32" roughness={0.88} />
+      </mesh>
+      <mesh position={[0, 16.2, 0]}>
+        <coneGeometry args={[3.4, 2.8, 4]} />
+        <meshStandardMaterial color="#313b41" roughness={0.82} />
+      </mesh>
+      <mesh position={[0, 10.3, 2.13]}>
+        <boxGeometry args={[2.4, 1.1, 0.12]} />
+        <meshStandardMaterial color="#17232b" emissive="#b46d3e" emissiveIntensity={0.75} />
+      </mesh>
+      <pointLight position={[0, 10.3, 3]} color="#d18b59" intensity={36} distance={18} />
+    </group>
     <Sparkles count={35} scale={[22, 5, 25]} size={1.1} speed={0.16} opacity={0.22} color="#9cb7c5" />
   </>
 }
