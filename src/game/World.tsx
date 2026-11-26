@@ -60,7 +60,7 @@ function Building({ position, size, tone = '#171f25' }: { position: [number, num
       const lit = row % 3 === 0 && col % 4 === 1
       return <mesh key={`${row}-${col}`} position={[-size[0] / 2 + 1.35 + col * 2.8, 1.3 + row * 2.5, size[2] / 2 + 0.012]}>
         <planeGeometry args={[0.78, 1.05]} />
-        <meshStandardMaterial color="#2a3942" emissive={lit ? '#d58d53' : '#111a20'} emissiveIntensity={lit ? 0.6 : 0.05} />
+        <meshBasicMaterial color={lit ? '#e6a56e' : '#657985'} />
       </mesh>
     }))}
   </group>
@@ -181,11 +181,14 @@ export default function World(props: WorldProps) {
     <color attach="background" args={['#080e14']} />
     <fog attach="fog" args={['#101a22', 11, 43]} />
     <hemisphereLight args={["#9fb8c8", "#27323a", 1.15]} />
-    <ambientLight intensity={0.72} color="#b3c5d1" />
-    <directionalLight position={[-8, 14, 5]} intensity={1.05} color="#9ab7ce" />
+    <ambientLight intensity={1.1} color="#d4e1e8" />
+    <hemisphereLight args={["#d1e5ef", "#53616a", 1.1]} />
+    <directionalLight position={[-8, 14, 5]} intensity={1.6} color="#b8d1e3" />
+    <pointLight position={[0, 5, -8]} color="#7899b0" intensity={36} distance={30} />
     <Rain />
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.08, -5]} receiveShadow><planeGeometry args={[34, 42]} /><meshStandardMaterial color="#19252b" roughness={0.22} metalness={0.38} /></mesh>
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.055, -5]}><planeGeometry args={[5.5, 42]} /><meshStandardMaterial color="#202b30" roughness={0.3} metalness={0.22} /></mesh>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.08, -5]} receiveShadow><planeGeometry args={[34, 42]} /><meshBasicMaterial color="#35464d" /></mesh>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.055, -5]}><planeGeometry args={[5.5, 42]} /><meshBasicMaterial color="#405159" /></mesh>
+    <mesh position={[0, 0.025, -9]}><boxGeometry args={[0.12, 0.035, 26]} /><meshBasicMaterial color="#c3ad88" /></mesh>
     {[-5, 5].map((x) => <Building key={x} position={[x * 1.5, 0, -13]} size={[9, 15, 8]} tone="#111a20" />)}
     {[-1, 1].map((z) => <group key={z}><StreetLamp position={[-6, 0, z * 8 - 4]} /><StreetLamp position={[6, 0, z * 8 - 4]} /></group>)}
     {Array.from({ length: 10 }).map((_, i) => <mesh key={i} position={[-1.9 + (i % 2) * 3.8, 0.012, -19 + i * 2.8]} rotation={[-Math.PI / 2, 0, 0]}><planeGeometry args={[0.07, 0.9]} /><meshBasicMaterial color="#a6a99c" transparent opacity={0.35} /></mesh>)}
