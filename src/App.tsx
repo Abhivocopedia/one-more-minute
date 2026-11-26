@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AudioLines, Clock3, Pause, Play, RotateCcw, Volume2, VolumeX, X } from 'lucide-react'
+import { AudioLines, Clock3, Pause, Play, RotateCcw, X } from 'lucide-react'
 import GameCanvas from './game/GameCanvas'
 
 type Phase = 'menu' | 'playing' | 'paused'
@@ -11,7 +11,6 @@ export default function App() {
   const [phoneAnswered, setPhoneAnswered] = useState(false)
   const [nearPhone, setNearPhone] = useState(false)
   const [dialogue, setDialogue] = useState(false)
-  const [muted, setMuted] = useState(false)
 
   useEffect(() => {
     const down = (event: KeyboardEvent) => {
@@ -59,12 +58,12 @@ export default function App() {
         {nearPhone && !phoneAnswered && <div className="interact-hint"><kbd>E</kbd> ANSWER THE PHONE</div>}
         <div className={`watch-hud ${rewinding ? 'is-rewinding' : ''}`}>
           <div className="watch-icon"><Clock3 size={22} /></div><div className="watch-info"><span>CHRONO-60</span><strong>{rewinding ? 'RECONSTRUCTING' : 'STANDBY'}</strong></div>
-          <div className="watch-meter"><div style={{ width: `${Math.min(100, (rewindAmount / 5) * 100)}%` }} /></div>
-          <span className="watch-time">{rewinding ? `−${rewindAmount.toFixed(1)}s` : '60s BUFFER'}</span>
+          <div className="watch-meter"><div style={{ width: `${Math.min(100, (rewindAmount / 60) * 100)}%` }} /></div>
+          <span className="watch-time">{rewinding ? `−${rewindAmount.toFixed(1)}s` : 'MAX 60s'}</span>
         </div>
         <div className="crosshair"><i /><i /></div>
         <div className="control-hint"><kbd>W A S D</kbd> MOVE <span /> <kbd>SHIFT</kbd> SPRINT <span /> <kbd>Q</kbd> HOLD TO REWIND</div>
-        <div className="hud-actions"><button aria-label="Pause" onClick={() => { setPhase('paused'); document.exitPointerLock?.() }}><Pause size={16} /></button><button aria-label="Toggle sound" onClick={() => setMuted(!muted)}>{muted ? <VolumeX size={16} /> : <Volume2 size={16} />}</button></div>
+        <div className="hud-actions"><button aria-label="Pause" onClick={() => { setPhase('paused'); document.exitPointerLock?.() }}><Pause size={16} /></button></div>
       </>}
 
       {phase === 'paused' && <section className="overlay-panel"><div className="panel-kicker">GREYHAVEN · PAUSED</div><h2>Take a breath.</h2><p>The rain is still falling.</p><button className="primary-button" onClick={resume}><Play size={15} fill="currentColor" /> RESUME</button><button className="text-button" onClick={() => { setPhase('menu'); document.exitPointerLock?.() }}><RotateCcw size={14} /> RETURN TO TITLE</button></section>}
