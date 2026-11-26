@@ -22,6 +22,8 @@ function Player({ phase, rewinding }: Pick<Props, 'phase' | 'rewinding'>) {
 
   useEffect(() => {
     camera.position.set(0, 1.72, 3.5)
+    camera.lookAt(0, 1.15, -10)
+    camera.updateProjectionMatrix()
     const down = (event: KeyboardEvent) => { keys.current[event.code] = true }
     const up = (event: KeyboardEvent) => { keys.current[event.code] = false }
     window.addEventListener('keydown', down)
