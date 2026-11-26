@@ -21,15 +21,12 @@ function Player({ phase, rewinding }: Pick<Props, 'phase' | 'rewinding'>) {
   const right = useRef(new THREE.Vector3())
 
   useEffect(() => {
-    camera.position.set(0, 1.72, 3.5)
-    camera.lookAt(0, 1.15, -10)
-    camera.updateProjectionMatrix()
     const down = (event: KeyboardEvent) => { keys.current[event.code] = true }
     const up = (event: KeyboardEvent) => { keys.current[event.code] = false }
     window.addEventListener('keydown', down)
     window.addEventListener('keyup', up)
     return () => { window.removeEventListener('keydown', down); window.removeEventListener('keyup', up) }
-  }, [camera])
+  }, [])
 
   useFrame((_, delta) => {
     if (phase !== 'playing' || rewinding) return
@@ -50,7 +47,17 @@ function Player({ phase, rewinding }: Pick<Props, 'phase' | 'rewinding'>) {
 }
 
 export default function GameCanvas(props: Props) {
-  return <Canvas shadows dpr={[1, 1.5]} camera={{ fov: 68, near: 0.1, far: 100, position: [0, 1.72, 3.5] }} gl={{ antialias: true, powerPreference: 'high-performance' }}>
+  return <Canvas
+    shadows
+    dpr={[1, 1.5]}
+    camera={{ fov: 68, near: 0.1, far: 140, position: [0, 1.72, 3.5] }}
+    gl={{ antialias: true, powerPreference: 'high-performance' }}
+    onCreated={({ camera }) => {
+      camera.position.set(0, 1.72, 3.5)
+      camera.lookAt(0, 0.15, -6.5)
+      camera.updateProjectionMatrix()
+    }}
+  >
     <Player phase={props.phase} rewinding={props.rewinding} />
     <World {...props} />
   </Canvas>
